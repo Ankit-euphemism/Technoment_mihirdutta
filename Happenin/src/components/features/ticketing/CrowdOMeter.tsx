@@ -141,10 +141,12 @@ const CrowdOMeter: React.FC<CrowdOMeterProps> = ({ eventId }) => {
       <div className="mt-4 pt-4 border-t border-gray-200">
         <p className="text-xs text-gray-500">
           Last updated:{' '}
-          {new Date(crowd.updated_at).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
+          {crowd.updated_at
+            ? new Date(crowd.updated_at).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })
+            : 'N/A'}
         </p>
       </div>
     </div>

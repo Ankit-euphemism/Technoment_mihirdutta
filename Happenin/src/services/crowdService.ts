@@ -1,65 +1,73 @@
 import { supabase } from '../lib/supabase';
 import type { CrowdMetric } from '../types';
 
+const createChannelName = (prefix: string, eventId: string): string => {
+  const randomPart = Math.random().toString(36).slice(2, 10);
+  return `${prefix}:${eventId}:${Date.now()}:${randomPart}`;
+};
+
 /**
  * CROWD-O-METER SERVICE
- * 
- * Rules applied:
- * ✅ Real-time updates via Supabase Realtime (WebSocket)
- * ✅ Debounced to avoid spam (batch updates)
- * ✅ Accurate crowd count (only checked-in attendees)
- * ✅ Track capacity for percentage calculation
+ *
+ * Client-side behavior:
+ * - Reads crowd metrics from Supabase.
+ * - Subscribes to realtime updates on crowd_metrics.
+ * - Does not write crowd metrics from the client.
  */
 
-// ──────────────────────────────────────────────
-// Debounce Timer for Crowd Updates
-// ──────────────────────────────────────────────
-const debounceTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const normalizeCrowdMetric = (metric: CrowdMetric): CrowdMetric => {
+  const safeCapacity = Math.max(metric.capacity, 1);
+  const safeCount = Math.max(metric.current_count, 0);
+  const computedPercentage = Math.min(100, Math.round((safeCount / safeCapacity) * 100));
+
+  return {
+    ...metric,
+    capacity: safeCapacity,
+    current_count: safeCount,
+    percentage: Number.isFinite(metric.percentage) ? Math.min(100, Math.max(0, metric.percentage)) : computedPercentage,
+  };
+};
+
+const getEventCapacity = async (eventId: string): Promise<number> => {
+  const { data: event, error: eventError } = await supabase
+    .from('events')
+    .select('max_capacity')
+    .eq('id', eventId)
+    .single();
+
+  if (eventError) throw eventError;
+
+  return Math.max(event?.max_capacity ?? 1, 1);
+};
 
 export const subscribeToRealTimeCrowd = (
   eventId: string,
-  callback: (crowd: CrowdMetric) => void,
-  debounceMs: number = 2000 // Wait 2 seconds before updating (avoid spam)
+  callback: (crowd: CrowdMetric) => void
 ) => {
-  // Subscribe to ticket check-ins for this event
-  const subscription = supabase
-    .channel(`event:${eventId}:check-ins`)
+  const metricsChannelName = createChannelName('event:crowd-metrics', eventId);
+
+  const metricsChannel = supabase
+    .channel(metricsChannelName)
     .on(
       'postgres_changes',
       {
-        event: 'UPDATE',
+        event: '*',
         schema: 'public',
-        table: 'tickets',
+        table: 'crowd_metrics',
         filter: `event_id=eq.${eventId}`,
       },
-      async () => {
-        // Debounce: Only update after 2 seconds of no changes
-        if (debounceTimers.has(eventId)) {
-          clearTimeout(debounceTimers.get(eventId)!);
+      (payload) => {
+        const row = payload.new as CrowdMetric | undefined;
+        if (row) {
+          callback(normalizeCrowdMetric(row));
         }
-
-        debounceTimers.set(
-          eventId,
-          setTimeout(async () => {
-            try {
-              const crowd = await getCrowdMetric(eventId);
-              callback(crowd);
-            } catch (error) {
-              console.error('Failed to fetch crowd metric:', error);
-            }
-            debounceTimers.delete(eventId);
-          }, debounceMs)
-        );
       }
     )
     .subscribe();
 
-  // Return unsubscribe function
   return () => {
-    subscription.unsubscribe();
-    if (debounceTimers.has(eventId)) {
-      clearTimeout(debounceTimers.get(eventId)!);
-    }
+    void metricsChannel.unsubscribe();
+    void supabase.removeChannel(metricsChannel);
   };
 };
 
@@ -68,36 +76,27 @@ export const subscribeToRealTimeCrowd = (
 // ──────────────────────────────────────────────
 export const getCrowdMetric = async (eventId: string): Promise<CrowdMetric> => {
   try {
-    // Get event capacity
-    const { data: event, error: eventError } = await supabase
-      .from('events')
-      .select('max_capacity')
-      .eq('id', eventId)
-      .single();
-
-    if (eventError) throw eventError;
-
-    // Count checked-in attendees
-    const { data: checkedInTickets, error: ticketError } = await supabase
-      .from('tickets')
-      .select('id', { count: 'exact' })
+    const { data, error } = await supabase
+      .from('crowd_metrics')
+      .select('*')
       .eq('event_id', eventId)
-      .eq('is_checked_in', true);
+      .maybeSingle();
 
-    if (ticketError) throw ticketError;
+    if (error) throw error;
 
-    const currentCount = checkedInTickets?.length || 0;
-    const capacity = event?.max_capacity || 1;
-    const percentage = Math.round((currentCount / capacity) * 100);
+    if (data) {
+      return normalizeCrowdMetric(data as CrowdMetric);
+    }
 
-    return {
+    const capacity = await getEventCapacity(eventId);
+    return normalizeCrowdMetric({
       id: `crowd:${eventId}`,
       event_id: eventId,
-      current_count: currentCount,
-      capacity: capacity,
-      percentage: Math.min(percentage, 100), // Cap at 100%
-      updated_at: new Date().toISOString(),
-    };
+      current_count: 0,
+      capacity,
+      percentage: 0,
+      updated_at: null,
+    });
   } catch (error) {
     console.error('Failed to get crowd metric:', error);
     throw error;
@@ -110,7 +109,7 @@ export const getCrowdMetric = async (eventId: string): Promise<CrowdMetric> => {
 export const getCrowdHistory = async (
   eventId: string,
   limit: number = 10
-) => {
+) : Promise<CrowdMetric[]> => {
   const { data, error } = await supabase
     .from('crowd_metrics')
     .select('*')
@@ -123,7 +122,7 @@ export const getCrowdHistory = async (
     return [];
   }
 
-  return data;
+  return (data ?? []).map((row) => normalizeCrowdMetric(row as CrowdMetric));
 };
 
 // ──────────────────────────────────────────────

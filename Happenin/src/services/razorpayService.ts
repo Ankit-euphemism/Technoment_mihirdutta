@@ -13,6 +13,7 @@
  */
 
 import { supabase } from '../lib/supabase';
+import type { Ticket } from '../types';
 
 declare global {
   interface Window {
@@ -155,7 +156,7 @@ export const openRazorpayPayment = async (
 // ──────────────────────────────────────────────
 export const verifyPayment = async (
   paymentVerification: PaymentVerificationRequest
-): Promise<{ success: boolean; tickets: any[] }> => {
+): Promise<{ success: boolean; tickets: Ticket[] }> => {
   try {
     const { data, error } = await supabase.functions.invoke('verify-razorpay-payment', {
       body: paymentVerification,
@@ -163,7 +164,7 @@ export const verifyPayment = async (
 
     if (error) throw error;
 
-    return data;
+    return data as { success: boolean; tickets: Ticket[] };
   } catch (err) {
     console.error('Payment verification failed:', err);
     throw err;

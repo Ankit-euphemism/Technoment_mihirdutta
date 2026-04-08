@@ -34,7 +34,7 @@
 
 ### Documentation
 - ✅ `RAZORPAY_SETUP.md` - Complete setup guide
-- ✅ `.env.local.example` - Environment variable template
+- ✅ `.env.example` - Environment variable template
 - ✅ `RAZORPAY_EDGE_FUNCTIONS.ts` - Ready-to-deploy code
 
 ---
@@ -61,7 +61,7 @@
 
 - [ ] **Create .env.local**
   ```bash
-  cp .env.local.example .env.local
+  cp .env.example .env.local
   # Then fill in your credentials
   ```
 
@@ -241,7 +241,7 @@ Happenin/
 │       └── index.ts                  ⏳ TODO: Deploy
 │
 ├── .env.local                        ⏳ TODO: Create
-├── .env.local.example                ✅ Template
+├── .env.example                      ✅ Template
 ├── RAZORPAY_SETUP.md                 ✅ Complete guide
 ├── RAZORPAY_EDGE_FUNCTIONS.ts        ✅ Ready to deploy
 └── TICKETING_GUIDE.md                ✅ Previous guide

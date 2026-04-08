@@ -1,6 +1,12 @@
 import { supabase } from '../lib/supabase';
 import type { Ticket, TicketPurchaseRequest } from '../types';
 
+interface CheckInResponse {
+  success: boolean;
+  message: string;
+  checked_in_at: string;
+}
+
 /**
  * ⚠️ TICKET VALIDATION MUST HAPPEN ON BACKEND
  * Frontend only handles display & QR scanning
@@ -9,7 +15,7 @@ import type { Ticket, TicketPurchaseRequest } from '../types';
 // ──────────────────────────────────────────────
 // Purchase Ticket - Calls Supabase Edge Function
 // ──────────────────────────────────────────────
-export const purchaseTicket = async (request: TicketPurchaseRequest) => {
+export const purchaseTicket = async (request: TicketPurchaseRequest): Promise<Ticket[]> => {
   try {
     // 🔐 Call backend Edge Function - this validates EVERYTHING
     // - Stock availability
@@ -34,7 +40,7 @@ export const purchaseTicket = async (request: TicketPurchaseRequest) => {
 // ──────────────────────────────────────────────
 // Get User's Tickets
 // ──────────────────────────────────────────────
-export const getUserTickets = async (userId: string) => {
+export const getUserTickets = async (userId: string): Promise<Ticket[]> => {
   const { data, error } = await supabase
     .from('tickets')
     .select('*')
@@ -48,7 +54,7 @@ export const getUserTickets = async (userId: string) => {
 // ──────────────────────────────────────────────
 // Check In Ticket (Frontend scans QR, sends to backend)
 // ──────────────────────────────────────────────
-export const checkInTicket = async (ticketId: string, qrCode: string) => {
+export const checkInTicket = async (ticketId: string, qrCode: string): Promise<CheckInResponse> => {
   try {
     // 🔐 Backend validates QR signature + expiration
     const { data, error } = await supabase.functions.invoke('check-in-ticket', {
@@ -62,45 +68,9 @@ export const checkInTicket = async (ticketId: string, qrCode: string) => {
       throw new Error(error.message);
     }
 
-    return data;
+    return data as CheckInResponse;
   } catch (err) {
     console.error('Check-in failed:', err);
     throw err;
   }
-};
-
-// ──────────────────────────────────────────────
-// Get Event Ticket Count (for crowd-o-meter)
-// ──────────────────────────────────────────────
-export const getTicketCount = async (eventId: string) => {
-  const { data, error } = await supabase
-    .from('tickets')
-    .select('id')
-    .eq('event_id', eventId)
-    .eq('is_checked_in', false); // Only count non-checked-in tickets
-
-  if (error) throw error;
-  return data?.length || 0;
-};
-
-// ──────────────────────────────────────────────
-// Get Checked-In Count
-// ──────────────────────────────────────────────
-export const getCheckedInCount = async (eventId: string) => {
-  const { data, error } = await supabase
-    .from('tickets')
-    .select('id')
-    .eq('event_id', eventId)
-    .eq('is_checked_in', true);
-
-  if (error) throw error;
-  return data?.length || 0;
-};
-
-// ──────────────────────────────────────────────
-// Get Total Attendees (checked in)
-// ──────────────────────────────────────────────
-export const getCurrentCrowd = async (eventId: string) => {
-  const count = await getCheckedInCount(eventId);
-  return count;
 };

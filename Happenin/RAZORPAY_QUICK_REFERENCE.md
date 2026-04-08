@@ -37,7 +37,7 @@
 ### Documentation
 1. **`RAZORPAY_SETUP.md`** - Complete 30-minute setup guide
 2. **`RAZORPAY_IMPLEMENTATION_CHECKLIST.md`** - Step-by-step checklist
-3. **`.env.local.example`** - Env variable template
+3. **`.env.example`** - Env variable template
 
 ---
 

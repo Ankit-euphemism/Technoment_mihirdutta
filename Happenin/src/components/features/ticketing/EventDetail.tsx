@@ -2,7 +2,6 @@ import React from 'react';
 import CrowdOMeter from './CrowdOMeter';
 import TicketPurchase from './TicketPurchase';
 import type { Event } from '../../../types';
-import styles from './EventDetail.module.css';
 
 interface EventDetailProps {
   event: Event;
@@ -34,7 +33,7 @@ const EventDetail: React.FC<EventDetailProps> = ({ event, userId, onClose }) => 
         )}
 
         <div
-          className={`w-full h-48 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg overflow-hidden mb-4 flex items-center justify-center ${styles.eventImage}`}
+          className="w-full h-48 bg-linear-to-br from-blue-500 to-indigo-700 rounded-lg overflow-hidden mb-4 flex items-center justify-center"
           style={{
             backgroundImage: event.image_url ? `url(${event.image_url})` : undefined,
           }}
@@ -48,7 +47,7 @@ const EventDetail: React.FC<EventDetailProps> = ({ event, userId, onClose }) => 
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 mb-2">{event.title}</h1>
-        <p className="text-gray-600 mb-4">{event.description}</p>
+  <p className="text-gray-600 mb-4">{event.description ?? 'No description provided.'}</p>
 
         {/* Basic Info */}
         <div className="grid grid-cols-2 gap-4 mb-6">

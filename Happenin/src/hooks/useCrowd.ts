@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getCrowdMetric, subscribeToRealTimeCrowd } from '../services/crowdService';
-import { getUserTickets } from '../services/ticketService';
-import type { CrowdMetric, Ticket } from '../types';
+import type { CrowdMetric } from '../types';
 
 /**
  * Hook: Real-time Crowd Updates
@@ -45,37 +44,6 @@ export const useCrowd = (eventId: string) => {
   }, [eventId]);
 
   return { crowd, loading, error };
-};
-
-/**
- * Hook: User's Tickets
- */
-export const useUserTickets = (userId: string | null) => {
-  const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!userId) {
-      setLoading(false);
-      return;
-    }
-
-    const loadTickets = async () => {
-      try {
-        const data = await getUserTickets(userId);
-        setTickets(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load tickets');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadTickets();
-  }, [userId]);
-
-  return { tickets, loading, error };
 };
 
 /**

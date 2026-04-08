@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useUserTickets } from '../../../hooks/useCrowd';
+import { useUserTickets } from '../../../hooks/useTickets';
 import { checkInTicket } from '../../../services/ticketService';
 import type { Ticket } from '../../../types';
 
@@ -106,7 +106,7 @@ const MyTickets: React.FC<MyTicketsProps> = ({ userId }) => {
               <div>
                 <p className="text-gray-600">Purchased</p>
                 <p className="font-medium text-gray-900">
-                  {new Date(ticket.purchase_date).toLocaleDateString()}
+                  {ticket.purchase_date ? new Date(ticket.purchase_date).toLocaleDateString() : 'N/A'}
                 </p>
               </div>
               <div>

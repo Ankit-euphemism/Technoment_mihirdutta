@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { getEvents } from '../services/eventServices';
+import { getEvents, subscribeToEvents } from '../services/eventServices';
 import type { Event } from '../types';
 
 interface UseEventsResult {
   events: Event[];
   loading: boolean;
-  error: Error | null;
+  error: string | null;
 }
 
 export const useEvents = (): UseEventsResult => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -21,10 +21,11 @@ export const useEvents = (): UseEventsResult => {
         const eventList = await getEvents();
         if (isMounted) {
           setEvents(eventList);
+          setError(null);
         }
       } catch (err) {
         if (isMounted) {
-          setError(err as Error);
+          setError(err instanceof Error ? err.message : 'Failed to load events');
         }
       } finally {
         if (isMounted) {
@@ -35,8 +36,13 @@ export const useEvents = (): UseEventsResult => {
 
     void loadEvents();
 
+    const unsubscribe = subscribeToEvents(() => {
+      void loadEvents();
+    });
+
     return () => {
       isMounted = false;
+      unsubscribe();
     };
   }, []);
 

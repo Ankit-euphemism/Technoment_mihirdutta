@@ -18,3 +18,157 @@ body {
 a {
   color: inherit;
 }
+
+.app-shell {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-header {
+  margin-bottom: 1.5rem;
+}
+
+.app-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+}
+
+.app-subtitle {
+  color: #4b5563;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.user-card {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.user-card-title {
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem;
+  color: #111827;
+}
+
+.user-input {
+  width: 100%;
+  max-width: 420px;
+  padding: 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+}
+
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nav-link {
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  text-decoration: none;
+  color: #374151;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  border-color: #94a3b8;
+}
+
+.nav-link.active {
+  background: #1e3a8a;
+  color: #fff;
+  border-color: #1e3a8a;
+}
+
+.page-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.page-card-title {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.page-stack {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.status-text {
+  color: #6b7280;
+}
+
+.error-text {
+  color: #b91c1c;
+}
+
+.event-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.event-list-item {
+  text-align: left;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.event-list-item:hover {
+  border-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.event-title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.event-location {
+  margin: 0.25rem 0 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.event-capacity {
+  margin: 0.3rem 0 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.inline-action {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #1d4ed8;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 1rem;
+  }
+
+  .app-title {
+    font-size: 1.65rem;
+  }
+}

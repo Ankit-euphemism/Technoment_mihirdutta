@@ -1,8 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import { useEvents } from '../../../hooks/useEvent';
-import { getEvents, subscribeToEvents } from '../../../services/eventServices';
 import type { Event } from '../../../types';
 
 // ──────────────────────────────────────────────
@@ -29,6 +27,12 @@ interface EventMarker {
   description: string;
   lat: number;
   lng: number;
+}
+
+interface RealTimeMapProps {
+  events: Event[];
+  loading: boolean;
+  error: string | null;
 }
 
 // ──────────────────────────────────────────────
@@ -61,37 +65,18 @@ interface EventMarker {
 // ──────────────────────────────────────────────
 // Component
 // ──────────────────────────────────────────────
-const RealTimeMap: React.FC = () => {
-  const { events, loading, error } = useEvents();
-  const [liveEvents, setLiveEvents] = useState<Event[]>(events);
-
-  useEffect(() => {
-    setLiveEvents(events);
-  }, [events]);
-
-  useEffect(() => {
-    const unsubscribe = subscribeToEvents(async () => {
-      try {
-        const latestEvents = await getEvents();
-        setLiveEvents(latestEvents);
-      } catch (subscriptionError) {
-        console.error('Failed to refresh events after realtime update:', subscriptionError);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
+const RealTimeMap: React.FC<RealTimeMapProps> = ({ events, loading, error }) => {
 
   const eventMarkers = useMemo<EventMarker[]>(
     () =>
-      liveEvents.map((event) => ({
+      events.map((event) => ({
         id: event.id,
         title: event.title,
-        description: event.description,
+        description: event.description ?? 'No description provided',
         lat: event.latitude,
         lng: event.longitude,
       })),
-    [liveEvents]
+    [events]
   );
 
   const defaultCenter: [number, number] = useMemo(() => {
@@ -99,7 +84,7 @@ const RealTimeMap: React.FC = () => {
       return [eventMarkers[0].lat, eventMarkers[0].lng];
     }
 
-    return [26.8467, 80.9462];
+    return [26.8393, 80.9231];
   }, [eventMarkers]);
 
   if (loading) {
@@ -107,7 +92,7 @@ const RealTimeMap: React.FC = () => {
   }
 
   if (error) {
-    return <div className="p-6 text-center text-red-600">Failed to load events: {error.message}</div>;
+    return <div className="p-6 text-center text-red-600">Failed to load events: {error}</div>;
   }
 
   if (eventMarkers.length === 0) {

@@ -60,7 +60,7 @@ pnpm install
 
 2. **Create .env.local**
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Fill in your credentials:
@@ -164,7 +164,6 @@ Visit: `http://localhost:5173`
 src/
 ├── components/
 │   ├── features/
-│   │   ├── auth/                    # Authentication
 │   │   ├── events/
 │   │   │   ├── AddEventForm.tsx     # Create events
 │   │   │   └── RealTimeMap.tsx      # Interactive map
@@ -174,16 +173,15 @@ src/
 │   │       ├── MyTickets.tsx        # User's tickets
 │   │       ├── EventDetail.tsx      # Event view
 │   │       └── index.ts             # Exports
-│   └── ui/                          # Reusable UI components
 │
 ├── services/
-│   ├── eventServices.js             # Event operations
+│   ├── eventServices.ts             # Event operations
 │   ├── ticketService.ts             # Ticket operations
 │   ├── crowdService.ts              # Real-time crowd updates
 │   └── razorpayService.ts           # Payment processing
 │
 ├── hooks/
-│   ├── useEvent.js                  # Event queries
+│   ├── useEvent.ts                  # Event queries
 │   └── useCrowd.ts                  # Crowd queries
 │
 ├── lib/
@@ -449,26 +447,3 @@ Built with ❤️ using React, TypeScript, Supabase, Razorpay, and Leaflet.js
 ---
 
 **Made with 🎉 for Happenin Events**
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
