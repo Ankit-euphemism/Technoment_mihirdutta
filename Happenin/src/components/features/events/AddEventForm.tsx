@@ -11,8 +11,8 @@ const AddEventForm: React.FC = () => {
     title: '',
     description: '',
     location: '',
-    latitude: 26.8467,
-    longitude: 80.9462,
+    latitude: 26.8393,
+    longitude:  80.9231,
     max_capacity: 100,
     image_url: ''
   });

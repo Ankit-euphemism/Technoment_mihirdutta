@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getLocalEvents } from '../services/eventServices';
+import { getEvents } from '../services/eventServices';
 import type { Event } from '../types';
 
 interface UseEventsResult {
@@ -18,7 +18,7 @@ export const useEvents = (): UseEventsResult => {
 
     const loadEvents = async (): Promise<void> => {
       try {
-        const eventList = await getLocalEvents();
+        const eventList = await getEvents();
         if (isMounted) {
           setEvents(eventList);
         }

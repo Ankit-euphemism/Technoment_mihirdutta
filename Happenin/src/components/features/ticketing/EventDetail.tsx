@@ -2,6 +2,7 @@ import React from 'react';
 import CrowdOMeter from './CrowdOMeter';
 import TicketPurchase from './TicketPurchase';
 import type { Event } from '../../../types';
+import styles from './EventDetail.module.css';
 
 interface EventDetailProps {
   event: Event;
@@ -33,11 +34,9 @@ const EventDetail: React.FC<EventDetailProps> = ({ event, userId, onClose }) => 
         )}
 
         <div
-          className="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg overflow-hidden mb-4 flex items-center justify-center"
+          className={`w-full h-48 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg overflow-hidden mb-4 flex items-center justify-center ${styles.eventImage}`}
           style={{
             backgroundImage: event.image_url ? `url(${event.image_url})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
           }}
         >
           {!event.image_url && (

@@ -1,6 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
+import { useEvents } from '../../../hooks/useEvent';
+import { getEvents, subscribeToEvents } from '../../../services/eventServices';
+import type { Event } from '../../../types';
 
 // ──────────────────────────────────────────────
 // Fix Leaflet's broken default marker icons in Vite/Webpack builds.
@@ -31,57 +34,93 @@ interface EventMarker {
 // ──────────────────────────────────────────────
 // Sample seed data (replace with Supabase real-time data)
 // ──────────────────────────────────────────────
-const SAMPLE_EVENTS: EventMarker[] = [
-  {
-    id: '1',
-    title: 'Summer Music Fest',
-    description: 'Live performances all day 🎸',
-    lat: 51.505,
-    lng: -0.09,
-  },
-  {
-    id: '2',
-    title: 'Food Street Market',
-    description: 'Local vendors & gourmet bites 🍔',
-    lat: 51.51,
-    lng: -0.1,
-  },
-  {
-    id: '3',
-    title: 'Art Exhibition',
-    description: 'Contemporary artists showcase 🎨',
-    lat: 51.5,
-    lng: -0.08,
-  },
-];
+// const SAMPLE_EVENTS: EventMarker[] = [
+//   {
+//     id: '1',
+//     title: 'Summer Music Fest',
+//     description: 'Live performances all day 🎸',
+//     lat: 51.505,
+//     lng: -0.09,
+//   },
+//   {
+//     id: '2',
+//     title: 'Food Street Market',
+//     description: 'Local vendors & gourmet bites 🍔',
+//     lat: 51.51,
+//     lng: -0.1,
+//   },
+//   {
+//     id: '3',
+//     title: 'Art Exhibition',
+//     description: 'Contemporary artists showcase 🎨',
+//     lat: 51.5,
+//     lng: -0.08,
+//   },
+// ];
 
 // ──────────────────────────────────────────────
 // Component
 // ──────────────────────────────────────────────
 const RealTimeMap: React.FC = () => {
-  const defaultCenter: [number, number] = [51.505, -0.09];
+  const { events, loading, error } = useEvents();
+  const [liveEvents, setLiveEvents] = useState<Event[]>(events);
 
   useEffect(() => {
-    // TODO: Subscribe to Supabase Realtime channel for live event updates
-    // supabase.channel('events').on('postgres_changes', ...).subscribe()
+    setLiveEvents(events);
+  }, [events]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToEvents(async () => {
+      try {
+        const latestEvents = await getEvents();
+        setLiveEvents(latestEvents);
+      } catch (subscriptionError) {
+        console.error('Failed to refresh events after realtime update:', subscriptionError);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
+  const eventMarkers = useMemo<EventMarker[]>(
+    () =>
+      liveEvents.map((event) => ({
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        lat: event.latitude,
+        lng: event.longitude,
+      })),
+    [liveEvents]
+  );
+
+  const defaultCenter: [number, number] = useMemo(() => {
+    if (eventMarkers.length > 0) {
+      return [eventMarkers[0].lat, eventMarkers[0].lng];
+    }
+
+    return [26.8467, 80.9462];
+  }, [eventMarkers]);
+
+  if (loading) {
+    return <div className="p-6 text-center text-gray-500">Loading events map...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-center text-red-600">Failed to load events: {error.message}</div>;
+  }
+
+  if (eventMarkers.length === 0) {
+    return <div className="p-6 text-center text-gray-500">No live events available right now.</div>;
+  }
+
   return (
-    <div
-      style={{
-        height: '480px',
-        width: '100%',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
-        border: '1px solid #e5e7eb',
-      }}
-    >
+    <div className="h-120 w-full overflow-hidden rounded-xl border border-gray-200 shadow-[0_4px_24px_rgba(0,0,0,0.12)]">
       <MapContainer
         center={defaultCenter}
         zoom={14}
         scrollWheelZoom={true}
-        style={{ height: '100%', width: '100%' }}
+        className="h-full w-full"
       >
         {/* OpenStreetMap tiles */}
         <TileLayer
@@ -90,12 +129,12 @@ const RealTimeMap: React.FC = () => {
         />
 
         {/* Event Markers */}
-        {SAMPLE_EVENTS.map((event) => (
+        {eventMarkers.map((event) => (
           <Marker key={event.id} position={[event.lat, event.lng]}>
             <Popup>
-              <strong style={{ fontSize: '14px' }}>{event.title}</strong>
+              <strong className="text-sm">{event.title}</strong>
               <br />
-              <span style={{ color: '#555', fontSize: '12px' }}>{event.description}</span>
+              <span className="text-xs text-gray-600">{event.description}</span>
             </Popup>
           </Marker>
         ))}
