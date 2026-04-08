@@ -1,11 +1,7 @@
 import React, { useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-<<<<<<< HEAD
 import type { Event } from '../../../types';
-=======
-import 'leaflet/dist/leaflet.css' assert { type: 'css' };
->>>>>>> 57158760ab2c820f0a1047af6987c10bfeb3b413
 
 // ──────────────────────────────────────────────
 // Fix Leaflet's broken default marker icons in Vite/Webpack builds.
