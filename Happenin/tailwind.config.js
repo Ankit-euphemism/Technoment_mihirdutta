@@ -10,10 +10,12 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        background: '#0a0a0a',
-        surface: '#171717',
-        primary: '#9333ea', // neon purple
-        secondary: '#06b6d4', // neon cyan
+        background: '#f8fafc', // slate-50
+        surface: '#ffffff',
+        primary: '#9333ea', // deep purple
+        secondary: '#06b6d4',
+        textMain: '#0f172a', // slate-900
+        textMuted: '#64748b', // slate-500
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

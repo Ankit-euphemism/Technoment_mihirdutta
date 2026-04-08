@@ -18,10 +18,10 @@ export function Button({
 }: ButtonProps) {
   
   const variants = {
-    primary: 'bg-white text-black hover:bg-gray-100',
-    secondary: 'bg-white/10 text-white hover:bg-white/20 border border-white/10',
-    ghost: 'bg-transparent text-white/70 hover:text-white',
-    neon: 'bg-purple-600 text-white shadow-[0_0_15px_rgba(147,51,234,0.5)] hover:shadow-[0_0_25px_rgba(147,51,234,0.7)] hover:bg-purple-500 border border-purple-500/50'
+    primary: 'bg-primary text-white hover:bg-purple-700 shadow-sm',
+    secondary: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200',
+    ghost: 'bg-transparent text-slate-600 hover:text-slate-900',
+    neon: 'bg-primary text-white shadow-md hover:shadow-lg hover:bg-purple-700'
   }
 
   const sizes = {

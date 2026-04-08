@@ -8,6 +8,9 @@ export interface Event {
   max_capacity: number;
   image_url: string;
   created_at: string;
+  price?: number;
+  category?: string;
+  event_date?: string;
 }
 
 export interface Ticket {

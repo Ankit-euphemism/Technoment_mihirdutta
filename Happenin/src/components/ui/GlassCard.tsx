@@ -14,14 +14,12 @@ export function GlassCard({ children, className, noPadding = false, ...props }: 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]',
+        'relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm',
         !noPadding && 'p-4',
         className
       )}
       {...props}
     >
-      {/* Subtle top glare effect */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       {children}
     </motion.div>
   )
