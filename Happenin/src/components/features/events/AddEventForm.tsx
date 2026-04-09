@@ -165,7 +165,12 @@ export function AddEventForm({ onClose, onSuccess }: Props) {
             <h2 className="font-bold text-slate-900 text-lg">List Your Event</h2>
             <p className="text-xs text-slate-500 mt-0.5">Step {step} of 2 — {step === 1 ? 'Basic Info' : 'Details & Logistics'}</p>
           </div>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors">
+          <button
+            onClick={onClose}
+            title="Close"
+            aria-label="Close"
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+          >
             <X className="w-5 h-5 text-slate-500" />
           </button>
         </div>
@@ -263,7 +268,7 @@ export function AddEventForm({ onClose, onSuccess }: Props) {
                   required
                 />
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <InputField icon={MapPin} label="Latitude" value={form.latitude} onChange={v => set('latitude', v)} type="number" placeholder="12.9716" />
                   <InputField icon={MapPin} label="Longitude" value={form.longitude} onChange={v => set('longitude', v)} type="number" placeholder="77.5946" />
                 </div>
@@ -277,7 +282,7 @@ export function AddEventForm({ onClose, onSuccess }: Props) {
                   required
                 />
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <InputField icon={Users} label="Max Capacity" value={form.max_capacity} onChange={v => set('max_capacity', v)} type="number" placeholder="200" required />
                   <InputField icon={IndianRupee} label="Ticket Price (₹)" value={form.price} onChange={v => set('price', v)} type="number" placeholder="499 or 0 for free" />
                 </div>

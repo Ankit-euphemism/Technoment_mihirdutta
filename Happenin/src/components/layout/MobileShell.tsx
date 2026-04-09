@@ -28,11 +28,11 @@ export function MobileShell() {
   ];
 
   return (
-    <div className="relative w-full h-screen bg-[#f5f5f5] overflow-hidden flex flex-col">
+    <div className="relative w-full h-dvh bg-[#f5f5f5] overflow-hidden flex flex-col">
       
       {/* ── Top Header (BookMyShow Style) ── */}
       <header className="bg-white border-b border-slate-100 shadow-sm z-50 flex-shrink-0">
-        <div className="max-w-[900px] mx-auto px-4 h-14 flex items-center gap-4">
+        <div className="max-w-[1200px] mx-auto px-3 sm:px-4 py-2 sm:h-14 sm:py-0 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4">
           {/* Logo */}
           <div
             className="flex-shrink-0 cursor-pointer"
@@ -46,7 +46,7 @@ export function MobileShell() {
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 flex items-center bg-slate-100 rounded-full px-4 py-2 gap-2 mx-2 hover:bg-slate-200 transition-colors cursor-text">
+          <div className="order-3 sm:order-none w-full sm:w-auto sm:flex-1 flex items-center bg-slate-100 rounded-full px-4 py-2 gap-2 sm:mx-2 hover:bg-slate-200 transition-colors cursor-text min-w-0">
             <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
             <input
               type="text"
@@ -56,7 +56,7 @@ export function MobileShell() {
           </div>
 
           {/* City Selector */}
-          <button className="flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap">
+          <button className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap">
             <MapPin className="w-4 h-4 text-primary" />
             Bangalore
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
@@ -68,7 +68,7 @@ export function MobileShell() {
           ) : user ? (
             <button
               onClick={() => setActiveTab('profile')}
-              className="flex items-center gap-2 flex-shrink-0 group"
+              className="flex items-center gap-2 flex-shrink-0 group ml-auto sm:ml-0"
             >
               <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <UserIcon className="w-4 h-4 text-primary" />
@@ -80,7 +80,7 @@ export function MobileShell() {
           ) : (
             <button
               onClick={() => setActiveTab('profile')}
-              className="flex-shrink-0 bg-primary text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-purple-700 transition-colors shadow-sm"
+              className="flex-shrink-0 ml-auto sm:ml-0 bg-primary text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-purple-700 transition-colors shadow-sm"
             >
               Sign In
             </button>
@@ -89,7 +89,7 @@ export function MobileShell() {
 
         {/* Sub Navigation */}
         <div className="border-t border-slate-100 bg-white">
-          <div className="max-w-[900px] mx-auto px-4 flex items-center gap-0 overflow-x-auto hide-scrollbar">
+          <div className="max-w-[1200px] mx-auto px-3 sm:px-4 flex items-center gap-0 overflow-x-auto hide-scrollbar">
             {NAV_ITEMS.map(item => (
               <button
                 key={item}
@@ -135,7 +135,7 @@ export function MobileShell() {
             </div>
 
             {/* Event Details Overlay */}
-            <div className="absolute bottom-0 inset-x-0 z-20 p-4 pb-20 pointer-events-none flex flex-col justify-end">
+            <div className="absolute bottom-0 inset-x-0 z-20 p-3 sm:p-4 pb-24 sm:pb-20 pointer-events-none flex flex-col justify-end">
               <GlassCard className="pointer-events-auto w-full p-5 bg-white backdrop-blur-md border border-slate-100 shadow-xl">
                 <div className="flex justify-between items-start mb-2">
                   <div>
@@ -276,8 +276,8 @@ export function MobileShell() {
       </AnimatePresence>
 
       {/* Bottom Navigation Bar */}
-      <div className="absolute bottom-0 inset-x-0 bg-white border-t border-slate-100 px-6 py-2 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
-        <div className="flex justify-between items-center pb-2">
+      <div className="absolute bottom-0 inset-x-0 bg-white border-t border-slate-100 px-4 sm:px-6 py-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
+        <div className="max-w-[1200px] mx-auto flex justify-between items-center pb-2">
           <button 
             onClick={() => setActiveTab('home')}
             className={cn("flex flex-col items-center p-2", activeTab === 'home' ? "text-primary" : "text-slate-400")}

@@ -126,11 +126,11 @@ export function BuyTicketModal({ event, userId, userEmail, onClose }: Props) {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 80, opacity: 0 }}
         transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-        className="bg-white w-full sm:max-w-sm rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden"
+        className="bg-white w-full sm:max-w-sm rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden max-h-[92dvh] overflow-y-auto"
       >
         {/* Success State */}
         {status === 'success' && (
-          <div className="p-10 flex flex-col items-center text-center">
+          <div className="p-6 sm:p-10 flex flex-col items-center text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -157,13 +157,18 @@ export function BuyTicketModal({ event, userId, userEmail, onClose }: Props) {
                 <Ticket className="w-5 h-5 text-primary" />
                 <h2 className="font-bold text-slate-900">Buy Ticket</h2>
               </div>
-              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors">
+              <button
+                onClick={onClose}
+                title="Close"
+                aria-label="Close"
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+              >
                 <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
 
             {/* Event Info */}
-            <div className="px-6 pt-5">
+            <div className="px-4 sm:px-6 pt-5">
               <div className="flex gap-3 items-start">
                 {event.image_url && (
                   <img src={event.image_url} alt={event.title} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
@@ -187,6 +192,8 @@ export function BuyTicketModal({ event, userId, userEmail, onClose }: Props) {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      title="Decrease quantity"
+                      aria-label="Decrease quantity"
                       className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:border-primary transition-colors"
                     >
                       <Minus className="w-3.5 h-3.5 text-slate-600" />
@@ -194,6 +201,8 @@ export function BuyTicketModal({ event, userId, userEmail, onClose }: Props) {
                     <span className="font-bold text-slate-900 w-6 text-center">{quantity}</span>
                     <button
                       onClick={() => setQuantity(q => Math.min(10, q + 1))}
+                      title="Increase quantity"
+                      aria-label="Increase quantity"
                       className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:border-primary transition-colors"
                     >
                       <Plus className="w-3.5 h-3.5 text-slate-600" />
@@ -227,7 +236,7 @@ export function BuyTicketModal({ event, userId, userEmail, onClose }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-5 mt-2">
+            <div className="px-4 sm:px-6 py-5 mt-2">
               <Button
                 variant="primary"
                 className="w-full flex items-center justify-center gap-2"

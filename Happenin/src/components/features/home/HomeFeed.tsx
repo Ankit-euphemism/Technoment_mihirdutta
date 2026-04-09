@@ -215,8 +215,8 @@ function FilterSidebar() {
   )
 
   return (
-    <div className="w-64 flex-shrink-0">
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4 sticky top-6">
+    <div className="w-full lg:w-64 lg:flex-shrink-0">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4 lg:sticky lg:top-6">
         <h2 className="text-base font-bold text-slate-900 mb-1">Filters</h2>
         <FilterSection id="languages" label="Languages" items={LANGUAGES} />
         <FilterSection id="genres" label="Genres" items={GENRES} />
@@ -276,20 +276,20 @@ export function HomeFeed() {
 
   return (
     <>
-    <div className="w-full h-full overflow-y-auto bg-[#f5f5f5]">
+    <div className="w-full h-full overflow-y-auto bg-[#f5f5f5] pb-24 sm:pb-28">
       {/* Hero Banner */}
-      <div className="w-full max-w-[900px] mx-auto mt-6 px-4">
-        <div className="w-full h-44 rounded-xl overflow-hidden relative shadow-md">
+      <div className="w-full max-w-[1200px] mx-auto mt-4 sm:mt-6 px-3 sm:px-4">
+        <div className="w-full h-36 sm:h-44 lg:h-52 rounded-xl overflow-hidden relative shadow-md">
           <img
             src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&q=80&w=1200"
             alt="Featured Event Banner"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-purple-900/50 to-transparent flex flex-col justify-center p-8">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-purple-900/50 to-transparent flex flex-col justify-center p-4 sm:p-8">
             <span className="text-purple-300 text-xs font-bold uppercase tracking-wider mb-1">Happenin</span>
-            <h2 className="text-white text-3xl font-black leading-tight">DISCOVER<br />LOCAL EVENTS</h2>
-            <p className="text-purple-200 text-sm mt-1">Step into your city's live culture</p>
-            <button className="mt-3 bg-primary text-white text-sm font-bold px-5 py-2 rounded-full w-max hover:bg-purple-700 transition-colors shadow-lg">
+            <h2 className="text-white text-2xl sm:text-3xl font-black leading-tight">DISCOVER<br />LOCAL EVENTS</h2>
+            <p className="text-purple-200 text-xs sm:text-sm mt-1">Step into your city's live culture</p>
+            <button className="mt-3 bg-primary text-white text-xs sm:text-sm font-bold px-4 sm:px-5 py-2 rounded-full w-max hover:bg-purple-700 transition-colors shadow-lg">
               Explore Now
             </button>
           </div>
@@ -297,7 +297,7 @@ export function HomeFeed() {
       </div>
 
       {/* Main Content: Sidebar + Grid */}
-      <div className="w-full max-w-[900px] mx-auto px-4 py-6 flex gap-6">
+      <div className="w-full max-w-[1200px] mx-auto px-3 sm:px-4 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 lg:gap-6">
         {/* Filters Sidebar */}
         <FilterSidebar />
 
@@ -327,7 +327,7 @@ export function HomeFeed() {
 
           {/* Loading state */}
           {loading && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="animate-pulse">
                   <div className="w-full aspect-[2/3] bg-slate-200 rounded-xl mb-2" />
@@ -347,7 +347,7 @@ export function HomeFeed() {
 
           {/* Event Poster Grid */}
           {!loading && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {displayEvents.map(event => (
                 <EventCard key={event.id} event={event} onBuy={setSelectedEvent} />
               ))}

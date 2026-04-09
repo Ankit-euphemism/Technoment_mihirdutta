@@ -155,6 +155,8 @@ export function OrganizerScanner({ onClose }: Props) {
         </div>
         <button
           onClick={handleClose}
+          title="Close scanner"
+          aria-label="Close scanner"
           className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
         >
           <X className="w-5 h-5 text-white" />
@@ -176,8 +178,7 @@ export function OrganizerScanner({ onClose }: Props) {
           {/* html5-qrcode renders into this div */}
           <div
             id={SCANNER_ID}
-            className="w-full h-full"
-            style={{ minHeight: '60vh' }}
+            className="w-full h-full min-h-[60vh]"
           />
 
           {/* Scan frame overlay */}
@@ -187,7 +188,7 @@ export function OrganizerScanner({ onClose }: Props) {
               <div className="absolute inset-0 bg-black/40" />
 
               {/* Scan box */}
-              <div className="relative w-60 h-60 z-10">
+              <div className="relative w-[70vw] h-[70vw] max-w-60 max-h-60 z-10">
                 <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-xl" />
                 <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-xl" />
                 <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-xl" />
@@ -215,7 +216,7 @@ export function OrganizerScanner({ onClose }: Props) {
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-                className="absolute bottom-0 inset-x-0 bg-white rounded-t-3xl p-6 shadow-2xl z-30"
+                className="absolute bottom-0 inset-x-0 bg-white rounded-t-3xl p-4 sm:p-6 shadow-2xl z-30 max-h-[70vh] overflow-y-auto"
               >
                 {result.state === 'verifying' && (
                   <div className="flex flex-col items-center py-6">

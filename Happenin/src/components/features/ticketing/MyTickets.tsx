@@ -67,7 +67,7 @@ export function MyTickets({ userId, onExplore }: Props) {
 
   if (loading) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-[#f5f5f5] p-6">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-[#f5f5f5] p-6 pb-24 sm:pb-28">
         <div className="w-8 h-8 rounded-full border-4 border-slate-200 border-t-primary animate-spin mb-4" />
         <p className="text-slate-500 text-sm">Loading your tickets...</p>
       </div>
@@ -76,7 +76,7 @@ export function MyTickets({ userId, onExplore }: Props) {
 
   if (error) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-[#f5f5f5] p-6 text-center">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-[#f5f5f5] p-6 pb-24 sm:pb-28 text-center">
         <p className="text-red-500 text-sm mb-4">⚠️ {error}</p>
         <Button variant="primary" onClick={fetchTickets}>Try Again</Button>
       </div>
@@ -85,7 +85,7 @@ export function MyTickets({ userId, onExplore }: Props) {
 
   if (tickets.length === 0) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-[#f5f5f5] p-6 text-center">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-[#f5f5f5] p-6 pb-24 sm:pb-28 text-center">
         <Ticket className="w-16 h-16 text-primary mb-4 mx-auto" />
         <h2 className="text-xl font-bold text-slate-900">Your Tickets</h2>
         <p className="text-slate-500 text-center mt-2 max-w-xs">
@@ -99,7 +99,7 @@ export function MyTickets({ userId, onExplore }: Props) {
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto bg-[#f5f5f5]">
+    <div className="w-full h-full overflow-y-auto bg-[#f5f5f5] pb-24 sm:pb-28">
       <div className="max-w-[600px] mx-auto px-4 py-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
